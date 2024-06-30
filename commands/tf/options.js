@@ -80,9 +80,9 @@ module.exports = {
                             { name: 'cat', value: 'cat' },
                             { name: 'horse', value: 'horse' },
                             { name: 'wolf', value: 'wolf' },
-                            { name: 'fox', value: 'fox' },
-                            { name: 'bunny', value: 'bunny' },
-                            { name: 'bird', value: 'bird' }
+                            { name: 'pig (broken)', value: 'pig' },
+                            { name: 'donkey', value: 'donkey' },
+                            { name: 'cow', value: 'cow' }
                         )
                 )
         )

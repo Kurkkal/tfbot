@@ -29,6 +29,10 @@ module.exports = {
         .addStringOption(option =>
             option.setName("time")
                 .setDescription("How long do you want to be a good boy for? (Specify time in minutes) Default=1hr")
+                .setRequired(false))
+        .addStringOption(option =>
+            option.setName("type")
+                .setDescription("The type of muzzle to use. Default=dog")
                 .setRequired(false)),
     async execute(interaction) {
         if (!interaction.guild) return await interaction.reply({ content: 'This command can only be used in a server.',  ephemeral: true });
@@ -41,6 +45,13 @@ module.exports = {
         let timeInMs = 3600000;
         let formattedTime = '1 hour';
         
+        if (muzzleHelper.db.has(user.id)) {
+            if (muzzleHelper.db.get(user.id).time > Date.now()) {
+                return await interaction.reply({ content: 'You are already muzzled.', ephemeral: true });
+            }
+        }
+        
+
         if (time) {
             if (isNaN(time)) return await interaction.reply({ content: 'Cmon pup, provide a valid number (in minutes) for the time.', ephemeral: true });
             timeInMs = time * 60000;
@@ -48,7 +59,9 @@ module.exports = {
             console.log(timeInMs);
         }
         
-        await muzzleHelper.muzzle(member, timeInMs);
+        const type = interaction.options.getString('type') || 'dog';
+
+        await muzzleHelper.muzzle(member, {time: timeInMs, type});
         await interaction.reply(`<@${user.id}> decided that they should be a good dog and put on their own muzzle~! They’ve decided that they will be such a good dog for ${formattedTime}.`);
     },
 };
