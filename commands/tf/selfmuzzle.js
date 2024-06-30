@@ -45,6 +45,13 @@ module.exports = {
         let timeInMs = 3600000;
         let formattedTime = '1 hour';
         
+        if (muzzleHelper.db.has(user.id)) {
+            if (muzzleHelper.db.get(user.id).time > Date.now()) {
+                return await interaction.reply({ content: 'You are already muzzled.', ephemeral: true });
+            }
+        }
+        
+
         if (time) {
             if (isNaN(time)) return await interaction.reply({ content: 'Cmon pup, provide a valid number (in minutes) for the time.', ephemeral: true });
             timeInMs = time * 60000;

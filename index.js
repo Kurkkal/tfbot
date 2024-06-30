@@ -128,7 +128,7 @@ client.on(Events.MessageCreate, async message => {
 
         switch (muzzleType) {
             case 'dog':
-                transformedMessage = await muzzleHelper.borkify(message.content);
+                transformedMessage = await muzzleHelper.borkify(message.content, message);
                 break;
             case 'cat':
                 transformedMessage = await muzzleHelper.catify(message.content);
@@ -141,6 +141,9 @@ client.on(Events.MessageCreate, async message => {
                 break;
             case 'donkey':
                 transformedMessage = await muzzleHelper.donkeyfy(message.content);
+                break;
+            case 'cow':
+                transformedMessage = await muzzleHelper.cowify(message.content);
                 break;
             default:
                 transformedMessage = await muzzleHelper.borkify(message.content);
@@ -177,15 +180,17 @@ client.on(Events.MessageCreate, async message => {
         const webhooks = await message.channel.fetchWebhooks();
         if (!webhooks.size) {
             await message.delete().catch(log.warn);
-            const newWebhook = await message.channel.createWebhook({
-                name: message.author.username,
-                avatar: message.author.displayAvatarURL({ dynamic: true }),
-            });
-            await newWebhook.send({
-                content: muzzledMessage.replace(/@/g, '@\u200B'),
-                username: message.author.username,
-                avatarURL: message.author.displayAvatarURL({ dynamic: true }),
-            });
+            try {
+                const newWebhook = await message.channel.createWebhook({
+                    name: message.author.username,
+                    avatar: message.author.displayAvatarURL({ dynamic: true }),
+                });
+                await newWebhook.send({
+                    content: muzzledMessage.replace(/@/g, '@\u200B'),
+                    username: message.author.username,
+                    avatarURL: message.author.displayAvatarURL({ dynamic: true }),
+                });
+            } catch (error) { log.warn(error); }
         } else {
             const webhook = webhooks.first();
             await message.delete().catch(log.warn);

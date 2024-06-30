@@ -15,6 +15,8 @@ Types of Muzzles:
 - donkey
 - gag
 - wolf
+- cow
+- pig (soon to be added)
 ---`
         await interaction.reply({ content: '```'+desc+'```',  ephemeral: true });
     },
